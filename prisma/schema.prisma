@@ -26,6 +26,7 @@ model Task {
   user        User     @relation(fields: [userId], references: [id])
 }
 
+
 enum Status {
   TODO
   IN_PROGRESS
