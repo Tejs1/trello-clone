@@ -21,7 +21,7 @@ import { reorder } from "@atlaskit/pragmatic-drag-and-drop/reorder";
 import { autoScrollWindowForElements } from "@atlaskit/pragmatic-drag-and-drop-auto-scroll/element";
 
 import useStore, { Task, Status } from "@/store";
-import { Column } from "./Board/column";
+import { Column } from "./Board/Column";
 import { BoardContext } from "./Board/board-context";
 import { Board } from "./Board/Board";
 import { createRegistry } from "./Board/registry";

@@ -6,7 +6,7 @@ import {
   dropTargetForElements,
 } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 
-import { TaskCard } from "./card";
+import { TaskCard } from "./Card";
 import { Status, Task } from "@/store";
 import { BoardContext } from "./board-context";
 
