@@ -2,6 +2,7 @@
 "use server";
 import { db } from "@/server/db";
 import { Status } from "@/store";
+import { Task } from "@prisma/client";
 const currentUser = () => {
   return { id: "66a94718554eb6b540cd4f69" };
 };
@@ -48,18 +49,17 @@ export async function getTasks() {
   }
 }
 
-export async function createTask(task: string) {
+export async function createTask(task: Omit<Task, "id" | "userId">) {
   try {
     const user = await currentUser();
-    await db.task.create({
+    const newTask = await db.task.create({
       data: {
-        title: task,
+        ...task,
         userId: user?.id ? user.id : "user",
-        status: "TODO",
       },
     });
     revalidatePath("/dashboard");
-    return { message: "Task created successfully" };
+    return { task: newTask, message: "Task created successfully" };
   } catch (error) {
     if (error instanceof Error) {
       console.error("Failed to create task:", error.message);

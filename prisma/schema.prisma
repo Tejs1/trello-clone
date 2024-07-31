@@ -37,5 +37,6 @@ enum Status {
 enum Priority {
   LOW
   MEDIUM
+  HIGH
   URGENT
 }

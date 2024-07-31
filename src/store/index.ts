@@ -6,7 +6,7 @@ export interface Task {
   title: string;
   description?: string | null;
   status: Status;
-  priority?: "LOW" | "MEDIUM" | "URGENT" | null;
+  priority?: "LOW" | "MEDIUM" | "HIGH" | "URGENT" | null;
   deadline?: Date | null;
 }
 
