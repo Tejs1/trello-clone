@@ -1,9 +1,8 @@
-import BoardExample from "@/components/Board";
 import JiraLikeApp from "@/components/BoardComponent";
 
 import { getTasks } from "@/server/actions"; // Assuming the Task type is exported from the server actions file
 import { Task } from "@/store";
-import TaskBoard from "./getTask";
+
 type getTaskType = Task[] | { error: string };
 export default async function DashBoardPage() {
   const tasks: getTaskType = await getTasks();
@@ -12,7 +11,6 @@ export default async function DashBoardPage() {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center">
         <JiraLikeApp />
-        <BoardExample />
       </main>
     );
   } else {
