@@ -96,7 +96,7 @@ export default function JiraLikeApp() {
       }
     };
 
-    updateTasks();
+    void updateTasks();
   }, []);
   useEffect(() => {
     stableBoardState.current = boardState;
@@ -192,7 +192,7 @@ export default function JiraLikeApp() {
         updateTask(updatedTask);
 
         // Update database
-        updateTaskInDB(updatedTask.id, updatedTask.status);
+        void updateTaskInDB(updatedTask.id, updatedTask.status);
         return {
           ...state,
           tasks: updatedTasks,
@@ -293,7 +293,7 @@ export default function JiraLikeApp() {
             );
             const target = location.current.dropTargets[0];
             const indexOfTarget = boardState.orderedColumnIds.findIndex(
-              (id) => id === target?.data.columnId,
+              (id) => id === target?.data.columnId!,
             );
             const closestEdgeOfTarget = extractClosestEdge(target?.data!);
 

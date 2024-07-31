@@ -1,7 +1,7 @@
 import JiraLikeApp from "@/components/BoardComponent";
 
 import { getTasks } from "@/server/actions"; // Assuming the Task type is exported from the server actions file
-import { Task } from "@/store";
+import { type Task } from "@/store";
 
 type getTaskType = Task[] | { error: string };
 export default async function DashBoardPage() {

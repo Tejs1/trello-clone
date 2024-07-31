@@ -81,7 +81,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
             <Badge
               variant={task.priority === "URGENT" ? "destructive" : "default"}
             >
-              {task.priority || "No priority"}
+              {task.priority ?? "No priority"}
             </Badge>
             {task.deadline && (
               <span className="text-xs text-gray-500">

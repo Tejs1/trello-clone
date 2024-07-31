@@ -1,8 +1,8 @@
 // import { Status, EnumStatusFieldUpdateOperationsInput } from "@/server/db";
 "use server";
 import { db } from "@/server/db";
-import { Status } from "@/store";
-import { Task } from "@prisma/client";
+import { type Status } from "@/store";
+import { type Task } from "@prisma/client";
 const currentUser = () => {
   return { id: "66a94718554eb6b540cd4f69" };
 };
@@ -25,7 +25,7 @@ export async function getUser() {
 
 export async function getTasks() {
   try {
-    const user = await currentUser();
+    const user = currentUser();
     const tasks = await db.task.findMany({
       select: {
         id: true,
@@ -51,7 +51,7 @@ export async function getTasks() {
 
 export async function createTask(task: Omit<Task, "id" | "userId">) {
   try {
-    const user = await currentUser();
+    const user = currentUser();
     const newTask = await db.task.create({
       data: {
         ...task,

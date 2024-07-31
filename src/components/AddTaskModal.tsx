@@ -33,8 +33,8 @@ import {
 } from "@/components/ui/select";
 import { createTask } from "@/server/actions";
 import useStore from "@/store";
-import { Status, Task } from "@/store";
-import { Priority } from "@prisma/client";
+import { type Task } from "@/store";
+import { type Priority } from "@prisma/client";
 
 const formSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -62,7 +62,7 @@ export function AddTaskModal() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const result = await createTask({
       ...values,
-      description: values.description || null,
+      description: values.description ?? null,
       priority: values.priority as Priority | null,
       deadline: values.deadline ? new Date(values.deadline) : null,
     });
