@@ -1,12 +1,4 @@
-import useStore, { Task, Status } from "@/store";
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  useContext,
-} from "react";
+import React, { useCallback, useEffect, useRef, useContext } from "react";
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import {
   draggable,
@@ -16,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BoardContext } from "./board-context";
+import { Task } from "@/store";
 
 export const TaskCard: React.FC<{ task: Task; index: number }> = ({
   task,
