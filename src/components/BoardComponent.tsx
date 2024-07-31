@@ -21,10 +21,10 @@ import { reorder } from "@atlaskit/pragmatic-drag-and-drop/reorder";
 import { autoScrollWindowForElements } from "@atlaskit/pragmatic-drag-and-drop-auto-scroll/element";
 
 import useStore, { Task, Status } from "@/store";
-import { Column } from "./MyBoard/column";
-import { BoardContext } from "./MyBoard/board-context";
-import { Board } from "./MyBoard/Board";
-import { createRegistry } from "./MyBoard/registry";
+import { Column } from "./Board/column";
+import { BoardContext } from "./Board/board-context";
+import { Board } from "./Board/Board";
+import { createRegistry } from "./Board/registry";
 type getTaskType = Task[] | { error: string };
 
 const statusColumns: Status[] = [

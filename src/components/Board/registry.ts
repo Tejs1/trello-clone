@@ -1,5 +1,4 @@
 import invariant from "tiny-invariant";
-
 import type { CleanupFn } from "@atlaskit/pragmatic-drag-and-drop/types";
 
 export type CardEntry = {
@@ -11,10 +10,6 @@ export type ColumnEntry = {
   element: HTMLElement;
 };
 
-/**
- * Registering cards and their action menu trigger element,
- * so that we can restore focus to the trigger when a card moves between columns.
- */
 export const createRegistry = () => {
   const tasks = new Map<
     string,

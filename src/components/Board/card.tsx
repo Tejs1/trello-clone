@@ -1,5 +1,4 @@
 import useStore, { Task, Status } from "@/store";
-
 import React, {
   useCallback,
   useEffect,
@@ -16,8 +15,8 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
 import { BoardContext } from "./board-context";
+
 export const TaskCard: React.FC<{ task: Task; index: number }> = ({
   task,
   index,
