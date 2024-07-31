@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
 import invariant from "tiny-invariant";
 
-import { createRegistry } from "./registry";
+import { type createRegistry } from "./registry";
 
 export const BoardContext = React.createContext<
   ReturnType<typeof createRegistry> & { instanceId: symbol }
->({} as any);
+>({} as ReturnType<typeof createRegistry> & { instanceId: symbol });
 
 export function useBoardContext() {
   const value = useContext(BoardContext);

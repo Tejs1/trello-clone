@@ -55,7 +55,7 @@ type Outcome =
       itemIndexInFinishColumn: number;
     };
 
-type Trigger = "pointer" | "keyboard";
+export type Trigger = "pointer" | "keyboard";
 
 type Operation = {
   trigger: Trigger;
@@ -293,9 +293,11 @@ export default function JiraLikeApp() {
             );
             const target = location.current.dropTargets[0];
             const indexOfTarget = boardState.orderedColumnIds.findIndex(
-              (id) => id === target?.data.columnId!,
+              (id) => id === target?.data.columnId,
             );
-            const closestEdgeOfTarget = extractClosestEdge(target?.data!);
+            const closestEdgeOfTarget = target
+              ? extractClosestEdge(target.data)
+              : null;
 
             const finishIndex = getReorderDestinationIndex({
               startIndex,
@@ -348,16 +350,20 @@ export default function JiraLikeApp() {
               const [destinationTaskRecord, destinationColumnRecord] =
                 location.current.dropTargets;
               const destinationColumnId =
-                destinationColumnRecord?.data.columnId;
+                destinationColumnRecord?.data?.columnId;
+              if (!destinationColumnId) return;
               const destinationColumn = boardState.orderedColumnIds.find(
                 (id) => id === destinationColumnId,
               )!;
-
+              if (!destinationColumn) return;
               const indexOfTarget = boardState.tasks
                 .filter((t) => t.status === destinationColumn)
                 .findIndex((t) => t.id === destinationTaskRecord?.data.taskId);
+              if (indexOfTarget === -1) return;
+              if (destinationTaskRecord === undefined) return;
+              if (destinationTaskRecord.data === undefined) return;
               const closestEdgeOfTarget = extractClosestEdge(
-                destinationTaskRecord?.data!,
+                destinationTaskRecord?.data,
               );
 
               if (sourceColumn === destinationColumn) {

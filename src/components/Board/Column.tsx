@@ -5,14 +5,25 @@ import {
   dropTargetForElements,
 } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import { TaskCard } from "./Card";
-import { Status, Task } from "@/store";
+import type { Status, Task } from "@/store";
 import { BoardContext } from "./board-context";
+import { Trigger } from "../BoardComponent";
 
 interface ColumnProps {
   status: Status;
   tasks: Task[];
   index: number;
-  reorderTask: (source: any, destination: any) => void;
+  reorderTask: ({
+    columnId,
+    startIndex,
+    finishIndex,
+    trigger,
+  }: {
+    columnId: string;
+    startIndex: number;
+    finishIndex: number;
+    trigger?: Trigger;
+  }) => void;
 }
 
 export const Column: React.FC<ColumnProps> = ({
