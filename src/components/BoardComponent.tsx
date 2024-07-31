@@ -20,6 +20,7 @@ import { monitorForElements } from "@atlaskit/pragmatic-drag-and-drop/element/ad
 import { reorder } from "@atlaskit/pragmatic-drag-and-drop/reorder";
 import { autoScrollWindowForElements } from "@atlaskit/pragmatic-drag-and-drop-auto-scroll/element";
 
+import { updateTask as updateTaskInDB } from "@/server/actions";
 import useStore, { Task, Status } from "@/store";
 import { Column } from "./Board/Column";
 import { BoardContext } from "./Board/board-context";
@@ -67,6 +68,7 @@ type BoardState = {
   lastOperation: Operation | null;
 };
 import { getTasks } from "@/server/actions";
+import { AddTaskModal } from "./AddTaskModal";
 export default function JiraLikeApp() {
   const { tasks, addTask, updateTask } = useStore();
   const setTasks = useStore((state) => state.setTasks);
@@ -99,37 +101,6 @@ export default function JiraLikeApp() {
   useEffect(() => {
     stableBoardState.current = boardState;
   }, [boardState]);
-
-  const reorderColumn = useCallback(
-    ({
-      startIndex,
-      finishIndex,
-      trigger = "keyboard",
-    }: {
-      startIndex: number;
-      finishIndex: number;
-      trigger?: Trigger;
-    }) => {
-      setBoardState((state) => ({
-        ...state,
-        orderedColumnIds: reorder({
-          list: state.orderedColumnIds,
-          startIndex,
-          finishIndex,
-        }),
-        lastOperation: {
-          outcome: {
-            type: "column-reorder",
-            columnId: state.orderedColumnIds[startIndex] as string,
-            startIndex,
-            finishIndex,
-          },
-          trigger,
-        },
-      }));
-    },
-    [],
-  );
 
   const reorderTask = useCallback(
     ({
@@ -217,7 +188,11 @@ export default function JiraLikeApp() {
           0,
           updatedTask,
         );
+        // Update store state
+        updateTask(updatedTask);
 
+        // Update database
+        updateTaskInDB(updatedTask.id, updatedTask.status);
         return {
           ...state,
           tasks: updatedTasks,
@@ -328,8 +303,6 @@ export default function JiraLikeApp() {
               closestEdgeOfTarget,
               axis: "horizontal",
             });
-
-            reorderColumn({ startIndex, finishIndex, trigger: "pointer" });
           } else if (source.data.type === "task") {
             const taskId = source.data.taskId;
             const [, startColumnRecord] = location.initial.dropTargets;
@@ -418,7 +391,7 @@ export default function JiraLikeApp() {
         },
       }),
     );
-  }, [boardState, instanceId, moveTask, reorderTask, reorderColumn]);
+  }, [boardState, instanceId, moveTask, reorderTask]);
 
   const contextValue = useMemo(
     () => ({
@@ -428,29 +401,11 @@ export default function JiraLikeApp() {
     [registry, instanceId],
   );
 
-  const handleAddTask = () => {
-    const newTask: Task = {
-      id: `task-${Date.now()}`,
-      title: `New Task ${boardState.tasks.length + 1}`,
-      description: "Description for the new task",
-      status: "TODO",
-      priority: "MEDIUM",
-      deadline: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 1 week from now
-    };
-    addTask(newTask);
-    setBoardState((state) => ({
-      ...state,
-      tasks: [...state.tasks, newTask],
-    }));
-  };
-
   return (
     <BoardContext.Provider value={contextValue}>
       <div className="container mx-auto p-4">
         <h1 className="mb-4 text-2xl font-bold">Jira-like Task Board</h1>
-        <Button onClick={handleAddTask} className="mb-4">
-          Add New Task
-        </Button>
+        <AddTaskModal />{" "}
         <Board>
           {boardState.orderedColumnIds.map((columnId) => (
             <Column
@@ -459,6 +414,8 @@ export default function JiraLikeApp() {
               tasks={boardState.tasks.filter(
                 (task) => task.status === columnId,
               )}
+              index={0}
+              reorderTask={reorderTask}
             />
           ))}
         </Board>

@@ -1,18 +1,25 @@
 import React, { useContext, useEffect, useRef } from "react";
-
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import {
   draggable,
   dropTargetForElements,
 } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
-
 import { TaskCard } from "./Card";
 import { Status, Task } from "@/store";
 import { BoardContext } from "./board-context";
 
-export const Column: React.FC<{ status: Status; tasks: Task[] }> = ({
+interface ColumnProps {
+  status: Status;
+  tasks: Task[];
+  index: number;
+  reorderTask: (source: any, destination: any) => void;
+}
+
+export const Column: React.FC<ColumnProps> = ({
   status,
   tasks,
+  index,
+  reorderTask,
 }) => {
   const { registerColumn, instanceId } = useContext(BoardContext);
   const ref = useRef<HTMLDivElement>(null);
@@ -32,6 +39,7 @@ export const Column: React.FC<{ status: Status; tasks: Task[] }> = ({
             type: "column",
             columnId: status,
             instanceId,
+            index,
           }),
         }),
         dropTargetForElements({
@@ -41,6 +49,7 @@ export const Column: React.FC<{ status: Status; tasks: Task[] }> = ({
             type: "column",
             columnId: status,
             instanceId,
+            index,
           }),
         }),
       );
@@ -50,13 +59,18 @@ export const Column: React.FC<{ status: Status; tasks: Task[] }> = ({
         cleanup();
       };
     }
-  }, [status, registerColumn, instanceId]);
+  }, [status, registerColumn, instanceId, index, reorderTask]);
 
   return (
     <div ref={ref} className="w-64 rounded-lg bg-gray-100 p-4">
       <h2 className="mb-4 font-bold">{status.replace("_", " ")}</h2>
-      {tasks.map((task, index) => (
-        <TaskCard key={task.id} task={task} index={index} />
+      {tasks.map((task, taskIndex) => (
+        <TaskCard
+          key={task.id}
+          task={task}
+          index={taskIndex}
+          columnId={status}
+        />
       ))}
     </div>
   );

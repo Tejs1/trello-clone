@@ -1,4 +1,6 @@
-import React, { useCallback, useEffect, useRef, useContext } from "react";
+// src/components/Board/Card.tsx
+
+import React, { useContext, useEffect, useRef } from "react";
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import {
   draggable,
@@ -10,9 +12,16 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BoardContext } from "./board-context";
 import { Task } from "@/store";
 
-export const TaskCard: React.FC<{ task: Task; index: number }> = ({
+interface TaskCardProps {
+  task: Task;
+  index: number;
+  columnId: string;
+}
+
+export const TaskCard: React.FC<TaskCardProps> = ({
   task,
   index,
+  columnId,
 }) => {
   const { registerTask, instanceId } = useContext(BoardContext);
   const ref = useRef<HTMLDivElement>(null);
@@ -35,6 +44,8 @@ export const TaskCard: React.FC<{ task: Task; index: number }> = ({
           getInitialData: () => ({
             type: "task",
             taskId: task.id,
+            index,
+            columnId,
             instanceId,
           }),
         }),
@@ -44,6 +55,8 @@ export const TaskCard: React.FC<{ task: Task; index: number }> = ({
           getData: () => ({
             type: "task",
             taskId: task.id,
+            index,
+            columnId,
             instanceId,
           }),
         }),
@@ -54,7 +67,7 @@ export const TaskCard: React.FC<{ task: Task; index: number }> = ({
         cleanup();
       };
     }
-  }, [task.id, registerTask, instanceId]);
+  }, [task.id, registerTask, instanceId, index, columnId]);
 
   return (
     <div ref={ref} className="mb-2">
